@@ -26,7 +26,7 @@ def portscan(target, port):
         client.connect((target, port))  # 建立TCP连接
         print("[*] %s:%d端口开放" % (target, port))
         # 将开放端口记录到文件中
-        with open(target + "-open_port.txt", "a") as f:
+        with open("open_ip.txt", "a") as f:
             f.write("%s:%d\n" % (target, port))
 
         client.close()
@@ -35,4 +35,12 @@ def portscan(target, port):
 
 
 if __name__ == "__main__":
-    main()
+    local_ip = socket.gethostbyname_ex(socket.gethostname())
+    all_threads = []
+    for ip in local_ip[2]:
+        for i in range(1, 255):
+            array = ip.split(".")  # 把IP以点号做分割
+            array[3] = str(i)
+            new_ip = '.'.join(array)
+            t = Thread(target=portscan, args=(new_ip, 9999))  # 创建线程对象
+            t.start()
