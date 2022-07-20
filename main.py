@@ -22,6 +22,7 @@ def portscan(target, port):
     try:
         client = socket.socket(
             socket.AF_INET, socket.SOCK_STREAM)  # 创建socket对象
+        client.settimeout(1)
         client.connect((target, port))  # 建立TCP连接
         print("[*] %s:%d端口开放" % (target, port))
         # 将开放端口记录到文件中
